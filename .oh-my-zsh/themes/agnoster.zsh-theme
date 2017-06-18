@@ -3,6 +3,8 @@
 # agnoster's Theme - https://gist.github.com/3712874
 # A Powerline-inspired theme for ZSH
 #
+# Forked by rjorgenson - http://github.com/rjorgenson
+#
 # # README
 #
 # In order for this theme to render correctly, you will need a
@@ -27,25 +29,21 @@
 
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
+#
+## Thanks for these! They helped a lot - rj
 
 CURRENT_BG='NONE'
+PRIMARY_FG=black
 
-# Special Powerline characters
-
-() {
-  local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-  # NOTE: This segment separator character is correct.  In 2012, Powerline changed
-  # the code points they use for their special characters. This is the new code point.
-  # If this is not working for you, you probably have an old version of the
-  # Powerline-patched fonts installed. Download and install the new version.
-  # Do not submit PRs to change this unless you have reviewed the Powerline code point
-  # history and have new information.
-  # This is defined using a Unicode escape sequence so it is unambiguously readable, regardless of
-  # what font the user is viewing this source code in. Do not replace the
-  # escape sequence with a single literal character.
-  # Do not change this! Do not make it '\u2b80'; that is the old, wrong code point.
-  SEGMENT_SEPARATOR=$'\ue0b0'
-}
+# Characters
+SEGMENT_SEPARATOR="\ue0b0"
+RSEGMENT_SEPARATOR="\ue0b2"
+PLUSMINUS="\u00b1"
+BRANCH="\ue0a0"
+DETACHED="\u27a6"
+CROSS="\u2718"
+LIGHTNING="\u26a1"
+GEAR="\u2699"
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -58,6 +56,22 @@ prompt_segment() {
     echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
   else
     echo -n "%{$bg%}%{$fg%} "
+  fi
+  CURRENT_BG=$1
+  [[ -n $3 ]] && echo -n $3
+}
+
+# Begin an RPROMPT segment
+# Takes two arguments, background and foreground. Both can be omitted,
+# rendering default background/foreground.
+rprompt_segment() {
+  local bg fg
+  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
+  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
+    echo -n " %{%K{$CURRENT_BG}%F{$1}%}$RSEGMENT_SEPARATOR%{$bg%}%{$fg%} "
+  else
+    echo -n "%F{$1}%{%K{default}%}$RSEGMENT_SEPARATOR%{$bg%}%{$fg%} "
   fi
   CURRENT_BG=$1
   [[ -n $3 ]] && echo -n $3
@@ -79,78 +93,39 @@ prompt_end() {
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
+  local user=$(whoami)
+
+  if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CONNECTION" ]]; then
+    prompt_segment $PRIMARY_FG default " %(!.%{%F{yellow}%}.)$user@%m "
   fi
 }
 
 # Git: branch/detached head, dirty status
 prompt_git() {
-  (( $+commands[git] )) || return
-  local PL_BRANCH_CHAR
-  () {
-    local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
+  local color ref
+  is_dirty() {
+    test -n "$(git status --porcelain --ignore-submodules)"
   }
-  local ref dirty mode repo_path
-  repo_path=$(git rev-parse --git-dir 2>/dev/null)
-
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
-    if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+  ref="$vcs_info_msg_0_"
+  if [[ -n "$ref" ]]; then
+    if is_dirty; then
+      color=yellow
+      ref="${ref} $PLUSMINUS"
     else
-      prompt_segment green black
+      color=green
+      ref="${ref} "
     fi
-
-    if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <B>"
-    elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" >M<"
-    elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >R>"
+    if [[ "${ref/.../}" == "$ref" ]]; then
+      ref="$BRANCH $ref"
+    else
+      ref="$DETACHED ${ref/.../}"
     fi
-
-    setopt promptsubst
-    autoload -Uz vcs_info
-
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚'
-    zstyle ':vcs_info:*' unstagedstr '●'
-    zstyle ':vcs_info:*' formats ' %u%c'
-    zstyle ':vcs_info:*' actionformats ' %u%c'
-    vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    prompt_segment $color $PRIMARY_FG
+    print -Pn " $ref"
   fi
 }
 
-prompt_bzr() {
-    (( $+commands[bzr] )) || return
-    if (bzr status >/dev/null 2>&1); then
-        status_mod=`bzr status | head -n1 | grep "modified" | wc -m`
-        status_all=`bzr status | head -n1 | wc -m`
-        revision=`bzr log | head -n2 | tail -n1 | sed 's/^revno: //'`
-        if [[ $status_mod -gt 0 ]] ; then
-            prompt_segment yellow black
-            echo -n "bzr@"$revision "✚ "
-        else
-            if [[ $status_all -gt 0 ]] ; then
-                prompt_segment yellow black
-                echo -n "bzr@"$revision
-
-            else
-                prompt_segment green black
-                echo -n "bzr@"$revision
-            fi
-        fi
-    fi
-}
-
 prompt_hg() {
-  (( $+commands[hg] )) || return
   local rev status
   if $(hg id >/dev/null 2>&1); then
     if $(hg prompt >/dev/null 2>&1); then
@@ -160,25 +135,25 @@ prompt_hg() {
         st='±'
       elif [[ -n $(hg prompt "{status|modified}") ]]; then
         # if any modification
-        prompt_segment yellow black
+        prompt_segment yellow $PRIMARY_FG
         st='±'
       else
         # if working copy is clean
-        prompt_segment green black
+        prompt_segment green $PRIMARY_FG
       fi
       echo -n $(hg prompt "☿ {rev}@{branch}") $st
     else
       st=""
       rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
       branch=$(hg id -b 2>/dev/null)
-      if `hg st | grep -q "^\?"`; then
-        prompt_segment red black
+      if $(hg st | grep -q "^\?"); then
+        prompt_segment red $PRIMARY_FG
         st='±'
-      elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
+      elif $(hg st | grep -q "^[MA]"); then
+        prompt_segment yellow $PRIMARY_FG
         st='±'
       else
-        prompt_segment green black
+        prompt_segment green $PRIMARY_FG
       fi
       echo -n "☿ $rev@$branch" $st
     fi
@@ -187,15 +162,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
-}
-
-# Virtualenv: current working virtualenv
-prompt_virtualenv() {
-  local virtualenv_path="$VIRTUAL_ENV"
-  if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
-    prompt_segment blue black "(`basename $virtualenv_path`)"
-  fi
+  prompt_segment blue $PRIMARY_FG ' %~ '
 }
 
 # Status:
@@ -205,24 +172,103 @@ prompt_virtualenv() {
 prompt_status() {
   local symbols
   symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}$CROSS"
+  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}$LIGHTNING"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}$GEAR"
 
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment $PRIMARY_FG default " $symbols "
+}
+
+# Virtualenv: current working virtualenv
+prompt_virtualenv() {
+  local virtualenv_path="$VIRTUAL_ENV"
+  if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
+    prompt_segment blue $PRIMARY_FG "($(basename $virtualenv_path))"
+  fi
+}
+
+# todo.sh: output current number of tasks
+prompt_todo() {
+  if $(hash todo.sh 2>&-); then # is todo.sh installed
+    count=$(todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+) tasks shown" | awk '{ print $4 }')
+    if [[ "$count" = <-> ]]; then
+      prompt_segment blue $PRIMARY_FG "T:$count"
+    fi
+  fi
+}
+
+# RVM: output current ruby version if RVM present
+prompt_rvm() {
+  local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
+  [ "$gemset" != "" ] && gemset="@$gemset"
+  local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
+  local full="$version$gemset"
+  [[ $full != '' ]] && rprompt_segment red $PRIMARY_FG "💎  $full"
+}
+
+# NVM: output current node version if NVM present
+prompt_nvm() {
+  if [[ $(type nvm) =~ 'nvm is a shell function' ]]; then
+    local v=$(nvm current)
+  fi
+  [[ $v != '' ]] && rprompt_segment green $PRIMARY_FG "⬢ $v"
+}
+
+# Timestamp: add a timestamp to prompt - real time clock, stops when command is executed
+prompt_timestamp() {
+  if [[ $ZSH_TIME = "24" ]]; then
+    local time_string="%H:%M:%S"
+  else
+    local time_string="%L:%M:%S %p"
+  fi
+  rprompt_segment blue $PRIMARY_FG "%D{$time_string}"
 }
 
 ## Main prompt
-build_prompt() {
+prompt_agnoster_rj_main() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
   prompt_context
   prompt_dir
+  prompt_todo
   prompt_git
-  prompt_bzr
   prompt_hg
   prompt_end
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt) '
+## Right prompt
+rprompt_agnoster_rj() {
+  prompt_nvm
+  prompt_rvm
+  prompt_timestamp
+  echo -n " " # rprompt looks awful without a space at the end
+}
+
+prompt_agnoster_rj_precmd() {
+  vcs_info
+  PROMPT='%{%f%b%k%}$(prompt_agnoster_rj_main) '
+  RPROMPT='%{%f%b%k%}$(rprompt_agnoster_rj)'
+}
+
+prompt_agnoster_setup() {
+  autoload -Uz add-zsh-hook
+  autoload -Uz vcs_info
+
+  prompt_opts=(cr subst percent)
+
+  add-zsh-hook precmd prompt_agnoster_rj_precmd
+
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' check-for-changes false
+  zstyle ':vcs_info:git*' formats '%b'
+  zstyle ':vcs_info:git*' actionformats '%b (%a)'
+}
+
+prompt_agnoster_setup "$@"
+
+# Needed for clock in prompt
+TMOUT=1
+TRAPALRM() {
+    zle reset-prompt
+}
