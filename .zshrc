@@ -54,8 +54,6 @@ ZSH_THEME="agnoster"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-source ~/.sebastian
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -84,3 +82,7 @@ source ~/.sebastian
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Customize to your needs...
+source ~/.sebastian
+source ~/.tinycareterminal
