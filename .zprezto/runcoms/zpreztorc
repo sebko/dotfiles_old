@@ -28,13 +28,17 @@ zstyle ':prezto:load' pmodule \
   'terminal' \
   'editor' \
   'history' \
+  'node' \
+  'ruby' \
   'directory' \
   'spectrum' \
   'utility' \
   'completion' \
+  'tmux' \
   'git' \
   'syntax-highlighting' \
   'history-substring-search' \
+  'osx' \
   'prompt'
 
 #
@@ -95,7 +99,7 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'peepcode'
+zstyle ':prezto:module:prompt' theme 'paradox'
 
 #
 # Ruby
@@ -168,4 +172,4 @@ zstyle ':prezto:module:prompt' theme 'peepcode'
 # zstyle ':prezto:module:tmux:auto-start' remote 'yes'
 
 # Integrate with iTerm2.
-# zstyle ':prezto:module:tmux:iterm' integrate 'yes'
+zstyle ':prezto:module:tmux:iterm' integrate 'yes'
