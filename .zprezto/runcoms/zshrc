@@ -13,5 +13,3 @@ fi
 # Customize to your needs...
 source ~/.sebastian
 source ~/.tinycareterminal
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
