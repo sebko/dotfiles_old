@@ -1,0 +1,3 @@
+" Overwrite this file with whatever you want. This will be executed after
+" loading any of the stock bundles/settings.
+set guifont=PragmataPro\ Mono:h15

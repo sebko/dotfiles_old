@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/Users/sebastiankey/github/smr-api'
+let g:netrw_dirhist_2='/Users/sebastiankey/Downloads/code/linting'
+let g:netrw_dirhist_3='/Users/sebastiankey/Downloads/code/grepping'
