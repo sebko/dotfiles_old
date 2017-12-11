@@ -2,26 +2,26 @@
 source "${ZDOTDIR:-$HOME}/.zprezto/modules/zsh-nvm/zsh-nvm.plugin.zsh"
 
 # place this after nvm initialization!
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+# autoload -U add-zsh-hook
+# load-nvmrc() {
+#   local node_version="$(nvm version)"
+#   local nvmrc_path="$(nvm_find_nvmrc)"
+#
+#   if [ -n "$nvmrc_path" ]; then
+#     local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+#
+#     if [ "$nvmrc_node_version" = "N/A" ]; then
+#       nvm install
+#     elif [ "$nvmrc_node_version" != "$node_version" ]; then
+#       nvm use
+#     fi
+#   elif [ "$node_version" != "$(nvm version default)" ]; then
+#     echo "Reverting to nvm default version"
+#     nvm use default
+#   fi
+# }
+# add-zsh-hook chpwd load-nvmrc
+# load-nvmrc
 
 # Add homebrew to the completion path
 fpath=(
@@ -34,8 +34,7 @@ fpath=(
 # cause... vim is badass
 export VISUAL=vim
 export EDITOR="$VISUAL"
-
-# export PATH="$PATH:`yarn global bin`"
+export FZF_DEFAULT_COMMAND='rg --files'
 
 # for commiting dotfiles
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
@@ -53,14 +52,13 @@ alias qb="cd /Users/sebastiankey/code/quantify/quantify-backend"
 alias mood="/Users/sebastiankey/code/Projects/mood-track"
 alias github="/Users/sebastiankey/github"
 alias home="/Users/sebastiankey/code"
-alias smr="/Users/sebastiankey/github/support-my-ref"
-
+alias tf="/Users/sebastiankey/github/tbr-web/"
+alias tb="/Users/sebastiankey/github/smr-api/"
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
 export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/
-# export PATH=$PATH:/usr/local/mysql/bin:`yarn global bin`
-
 cd /Users/sebastiankey/github
+
