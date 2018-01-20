@@ -56,9 +56,9 @@ alias mood="/Users/sebastiankey/code/Projects/mood-track"
 alias github="/Users/sebastiankey/github"
 alias home="/Users/sebastiankey/code"
 alias tf="/Users/sebastiankey/github/tbr-web/"
-alias tb="/Users/sebastiankey/github/smr-api/"
-alias tcf="/Users/sebastiankey/github/tbr-campaign-web/"
-alias tcb="/Users/sebastiankey/github/tbr-campaign-api/"
+alias tb="/Users/sebastiankey/github/tbr-api/"
+alias cf="/Users/sebastiankey/github/tbr-campaign-web/"
+alias cb="/Users/sebastiankey/github/tbr-campaign-api/"
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
