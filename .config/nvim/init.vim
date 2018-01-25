@@ -56,6 +56,7 @@ call minpac#add('ryanoasis/vim-devicons')
 call minpac#add('vim-airline/vim-airline')
 call minpac#add('trevordmiller/nova-vim')
 call minpac#add('scrooloose/nerdcommenter')
+call minpac#add('arcticicestudio/nord-vim')
 filetype plugin on
 
 " Custom hyperclick style file navigation
@@ -73,5 +74,5 @@ set t_8f=^[[38;2;%lu;%lu;%lum
 let g:airline_powerline_fonts = 1
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
-let g:airline_theme='oceanicnext'
+"let g:airline_theme='oceanicnext'
 let g:jsx_ext_required = 0

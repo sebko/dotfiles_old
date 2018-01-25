@@ -1,14 +1,2 @@
 " Overwrite this file with whatever you want. This will be executed after
 " loading any of the stock bundles/settings.
-
-" Theme
- set guifont=PragmataPro\ Mono:h15
- syntax enable
-" for vim 8
- if (has("termguicolors"))
-  set termguicolors
- endif
-
-colorscheme OceanicNext
-
-let g:jsx_ext_required = 0
