@@ -85,65 +85,40 @@ render_timer: false
 # and cursor.background colors, otherwise invert the colors of the cursor.
 custom_cursor_colors: false
 
-## Base16 OceanicNext 256 - alacritty color config
-## https://github.com/voronianski/oceanic-next-color-scheme
-#colors:
-  ## Default colors
-  #primary:
-    #background: '0x1b2b34'
-    #foreground: '0xc0c5ce'
-
-  ## Colors the cursor will use if `custom_cursor_colors` is true
-  #cursor:
-    #text: '0x1b2b34'
-    #cursor: '0xc0c5ce'
-
-  ## Normal colors
-  #normal:
-    #black:   '0x1b2b34'
-    #red:     '0xec5f67'
-    #green:   '0x99c794'
-    #yellow:  '0xfac863'
-    #blue:    '0x6699cc'
-    #magenta: '0xc594c5'
-    #cyan:    '0x5fb3b3'
-    #white:   '0xc0c5ce'
-
-  ## Bright colors
-  #bright:
-    #black:   '0x65737e'
-    #red:     '0xec5f67'
-    #green:   '0x99c794'
-    #yellow:  '0xfac863'
-    #blue:    '0x6699cc'
-    #magenta: '0xc594c5'
-    #cyan:    '0x5fb3b3'
-    #white:   '0xc0c5ce'
+# Base16 OceanicNext 256 - alacritty color config
+# https://github.com/voronianski/oceanic-next-color-scheme
 colors:
+  # Default colors
   primary:
-    background: '0x2E3440'
-    foreground: '0xD8DEE9'
+    background: '0x1b2b34'
+    foreground: '0xc0c5ce'
+
+  # Colors the cursor will use if `custom_cursor_colors` is true
   cursor:
-    text: '0x2E3440'
-    cursor: '0xD8DEE9'
+    text: '0x1b2b34'
+    cursor: '0xc0c5ce'
+
+  # Normal colors
   normal:
-    black: '0x3B4252'
-    red: '0xBF616A'
-    green: '0xA3BE8C'
-    yellow: '0xEBCB8B'
-    blue: '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan: '0x88C0D0'
-    white: '0xE5E9F0'
+    black:   '0x1b2b34'
+    red:     '0xec5f67'
+    green:   '0x99c794'
+    yellow:  '0xfac863'
+    blue:    '0x6699cc'
+    magenta: '0xc594c5'
+    cyan:    '0x5fb3b3'
+    white:   '0xc0c5ce'
+
+  # Bright colors
   bright:
-    black: '0x4C566A'
-    red: '0xBF616A'
-    green: '0xA3BE8C'
-    yellow: '0xEBCB8B'
-    blue: '0x81A1C1'
-    magenta: '0xB48EAD'
-    cyan: '0x8FBCBB'
-    white: '0xECEFF4'
+    black:   '0x65737e'
+    red:     '0xec5f67'
+    green:   '0x99c794'
+    yellow:  '0xfac863'
+    blue:    '0x6699cc'
+    magenta: '0xc594c5'
+    cyan:    '0x5fb3b3'
+    white:   '0xc0c5ce'
 # Visual Bell
 #
 # Any time the BEL code is received, Alacritty "rings" the visual bell. Once
