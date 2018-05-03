@@ -1,1 +1,1 @@
-/Users/sebastiankey/.zprezto/runcoms/zshrc
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
