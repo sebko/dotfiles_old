@@ -49,9 +49,9 @@ set rtp+=/usr/local/opt/fzf
 call minpac#add('dracula/vim')
 call minpac#add('mhartington/oceanic-next')
 call minpac#add('tpope/vim-surround')
+call minpac#add('mxw/vim-jsx')
 call minpac#add('Galooshi/vim-import-js')
 call minpac#add('leafgarland/typescript-vim')
-call minpac#add('mxw/vim-jsx')
 call minpac#add('ryanoasis/vim-devicons')
 call minpac#add('vim-airline/vim-airline')
 call minpac#add('trevordmiller/nova-vim')
@@ -68,7 +68,7 @@ set termguicolors
 " Theme
 syntax enable
 set encoding=utf8
-colorscheme OceanicNext	
+colorscheme OceanicNext
 set t_8b=^[[48;2;%lu;%lu;%lum
 set t_8f=^[[38;2;%lu;%lu;%lum
 let g:airline_powerline_fonts = 1
