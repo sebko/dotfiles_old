@@ -12,14 +12,14 @@ alias n="npm"
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export FZF_DEFAULT_COMMAND='rg --files'
-export TERM=xterm-256color
+export TERM=screen-256color
 export VIMCONFIG=~/.config/nvim
 export VIMDATA=~/.local/share/nvim
-export PYENV_VERSION=2.7.10
 
-# # Android studio
+# Android studio
 set -g ANDROID_HOME /Users/sebastiankey/Library/Android/sdk
 export ANDROID_HOME=/Users/sebastiankey/Library/Android/sdk
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home
 
-set PATH $PATH $ANDROID_HOME/tools $ANDROID_HOME/platform-tools 
+set PATH $PATH $ANDROID_HOME/tools $ANDROID_HOME/platform-tools  $JAVA_HOME/bin
 eval (direnv hook fish)

@@ -1,9 +1,14 @@
 packadd minpac
 call minpac#init()
 call minpac#add('othree/yajs.vim')
+call minpac#add('othree/es.next.syntax.vim')
+call minpac#add('othree/html5.vim')
+"call minpac#add('pangloss/vim-javascript')
+call minpac#add('mxw/vim-jsx')
 call minpac#add('tpope/vim-dispatch')
 call minpac#add('w0rp/ale')
 call minpac#add('prettier/vim-prettier')
+call minpac#add('tpope/vim-unimpaired')
 
 let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier']
@@ -15,7 +20,6 @@ nmap <silent> [w <Plug>(ale_previous)
 nmap <silent> ]w <Plug>(ale_next)
 nmap <silent> ]W <Plug>(ale_last)
 
-call minpac#add('othree/es.next.syntax.vim')
 call minpac#add('tpope/vim-projectionist')
 call minpac#add('mhinz/vim-grepper')
 
@@ -46,33 +50,30 @@ command! PackClean call minpac#clean()
 
 set rtp+=/usr/local/opt/fzf
 
-call minpac#add('dracula/vim')
 call minpac#add('mhartington/oceanic-next')
 call minpac#add('tpope/vim-surround')
-call minpac#add('mxw/vim-jsx')
 call minpac#add('Galooshi/vim-import-js')
-call minpac#add('leafgarland/typescript-vim')
 call minpac#add('ryanoasis/vim-devicons')
 call minpac#add('vim-airline/vim-airline')
-call minpac#add('trevordmiller/nova-vim')
 call minpac#add('scrooloose/nerdcommenter')
-call minpac#add('arcticicestudio/nord-vim')
 filetype plugin on
 
 " Custom hyperclick style file navigation
 nnoremap <buffer> <unique> <silent> <Leader>H :ImportJSGoto<CR>
 
-
-set termguicolors
-
-" Theme
-syntax enable
 set encoding=utf8
+" Theme
+set termguicolors
+syntax on
+let g:oceanic_next_terminal_bold = 1
+let g:oceanic_next_terminal_italic = 1
 colorscheme OceanicNext
+
 set t_8b=^[[48;2;%lu;%lu;%lum
 set t_8f=^[[38;2;%lu;%lu;%lum
 let g:airline_powerline_fonts = 1
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
-"let g:airline_theme='oceanicnext'
-let g:jsx_ext_required = 0
+let g:airline_theme='oceanicnext'
+let g:python_host_prog = '/Users/sebastiankey/.pyenv/versions/2.7.10/bin/python'
+let g:python3_host_prog = '/Users/sebastiankey/.pyenv/versions/3.6.5/bin/python'
